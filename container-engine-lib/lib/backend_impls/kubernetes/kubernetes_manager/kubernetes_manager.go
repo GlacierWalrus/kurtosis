@@ -1637,7 +1637,7 @@ func (manager *KubernetesManager) HasComputeNodes(ctx context.Context) (bool, er
 
 // ---------------------------Ingresses------------------------------------------------------------------------------
 
-func (manager *KubernetesManager) CreateIngress(ctx context.Context, namespace string, name string, labels map[string]string, annotations map[string]string, rules []netv1.IngressRule) (*netv1.Ingress, error) {
+func (manager *KubernetesManager) CreateIngress(ctx context.Context, namespace string, name string, labels map[string]string, annotations map[string]string, ingressClassName *string, rules []netv1.IngressRule) (*netv1.Ingress, error) {
 	client := manager.kubernetesClientSet.NetworkingV1().Ingresses(namespace)
 
 	ingress := &netv1.Ingress{
@@ -1665,7 +1665,7 @@ func (manager *KubernetesManager) CreateIngress(ctx context.Context, namespace s
 			ManagedFields:              nil,
 		},
 		Spec: netv1.IngressSpec{
-			IngressClassName: nil,
+			IngressClassName: ingressClassName,
 			DefaultBackend:   nil,
 			TLS:              nil,
 			Rules:            rules,

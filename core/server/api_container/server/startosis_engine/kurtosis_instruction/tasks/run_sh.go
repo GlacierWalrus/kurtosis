@@ -387,6 +387,8 @@ func replaceMagicStringsInEnvVars(runtimeValueStore *runtime_value_store.Runtime
 		serviceConfig.GetLabels(),
 		serviceConfig.GetIngressAnnotations(),
 		serviceConfig.GetIngressClassName(),
+		serviceConfig.GetIngressHost(),
+		serviceConfig.GetIngressTLSHost(),
 		serviceConfig.GetUser(),
 		serviceConfig.GetTolerations(),
 		serviceConfig.GetNodeSelectors(),

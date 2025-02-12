@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	defaultKubernetesEnclaveDataVolumeSizeInMegabytes = uint(1024)
+  // defaultKubernetesEnclaveDataVolumeSizeInMegabytes = uint(1024)
+	defaultKubernetesEnclaveDataVolumeSizeInMegabytes = 4* uint(1024)
 )
 
 type kurtosisBackendSupplier func(ctx context.Context) (backend_interface.KurtosisBackend, error)

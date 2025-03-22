@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/gammazero/workerpool"
 	"github.com/kurtosis-tech/kurtosis/container-engine-lib/lib/backend_impls/kubernetes/kubernetes_kurtosis_backend/consts"
 	"github.com/kurtosis-tech/kurtosis/container-engine-lib/lib/backend_impls/kubernetes/kubernetes_manager"
@@ -390,8 +391,16 @@ func GetUserServiceKubernetesResourcesMatchingGuids(
 		logrus.Tracef("Found Kubernetes ingress for GUID '%v': %+v", serviceGuidStr, kubernetesIngressForGuid)
 		serviceUuid := service.ServiceUUID(serviceGuidStr)
 
+		//  Filter our the user specified ingresses
 		numIngressesForGuid := len(kubernetesIngressForGuid)
-		if numIngressesForGuid != 1 {
+		nonUserIngresses := 0
+		for _, ingress := range kubernetesIngressForGuid {
+			if _, found := ingress.Labels[kubernetes_label_key.MustCreateNewKubernetesLabelKey("extra-ingress").GetString()]; !found {
+				nonUserIngresses++
+			}
+		}
+
+		if nonUserIngresses != 1 {
 			return nil, stacktrace.NewError("Found %v Kubernetes ingresses associated with service GUID '%v', but number of ingresses should be exactly 1; this is a bug in Kurtosis", numIngressesForGuid, serviceUuid)
 		}
 		kubernetesIngress := kubernetesIngressForGuid[0]
